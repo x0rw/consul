@@ -194,7 +194,10 @@ Usage: `consul snapshot agent [options]`
         {
           "account_name": "",
           "account_key": "",
-          "container_name": ""
+          "container_name": "",
+          "service_principal_id": "",
+          "service_principal_secret": "",
+          "tenant_id" ; ""
         }
       ],
       "google_storage": [
@@ -395,6 +398,12 @@ These options cannot be used when using `backup_destinations` in a config file.
 
 - `-azure-blob-container-name` - Container to use. Required for Azure blob storage, and setting this
   disables local storage.
+
+~> `-azure-blob-service-principal-id`, `-azure-blob-service-principal-secret`, and `-azure-blob-tenant-id` are introduced in v1.20.1+ent.
+
+- `-azure-blob-service-principal-id` and `-azure-blob-service-principal-secret` - You must provide Service Principal (SPN) ID + Secret pair together.
+
+- `-azure-blob-tenant-id` - Required field if using Service Principal (SPN) ID + Secret. Not required if you use Account Key only.
 
 * `-azure-blob-environment` - Environment to use. Defaults to AZUREPUBLICCLOUD. Other valid environments
   are AZURECHINACLOUD, AZUREGERMANCLOUD and AZUREUSGOVERNMENTCLOUD. Introduced in Consul 1.7.3.
