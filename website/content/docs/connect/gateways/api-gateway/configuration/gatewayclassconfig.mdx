@@ -155,8 +155,14 @@ You can specify the following strings:
 * `trace`
 
 ### mapPrivilegedContainerPorts
-Specifies a value that Consul adds to privileged ports defined in the gateway. Privileged ports are port numbers less than 1024 and some platforms, such as Red Hat OpenShift, explicitly configure Kubernetes to avoid running containers on privileged ports. The total value of the configured port number and the `mapPrivilegedContainerPorts` value must not exceed 65535, which is the highest possible TCP port number allowed.
-for gateway containers
+Specifies a value that Consul adds to privileged ports defined in the gateway.
+Privileged ports are port numbers less than 1024 and require the `NET_BIND_SERVICE` capability.
+Some configurations, such as the
+[restricted policy provided under Kubernetes' Pod Security Standards](https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted) and
+[Red Hat OpenShift's restricted-v2 security context constraints](https://docs.openshift.com/dedicated/authentication/managing-security-context-constraints.html),
+explicitly configure Kubernetes to avoid running containers on privileged ports.
+The total value of the configured port number and the `mapPrivilegedContainerPorts` value must not
+exceed 65535, which is the highest possible TCP port number allowed.
 * Type: Integer
 * Required: optional
 
