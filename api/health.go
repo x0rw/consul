@@ -75,6 +75,7 @@ type HealthCheckDefinition struct {
 	IntervalDuration                       time.Duration `json:"-"`
 	TimeoutDuration                        time.Duration `json:"-"`
 	DeregisterCriticalServiceAfterDuration time.Duration `json:"-"`
+	SessionID                              string        `json:",omitempty"`
 
 	// DEPRECATED in Consul 1.4.1. Use the above time.Duration fields instead.
 	Interval                       ReadableDuration

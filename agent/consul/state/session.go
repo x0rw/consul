@@ -13,6 +13,7 @@ import (
 
 	"github.com/hashicorp/consul/acl"
 	"github.com/hashicorp/consul/agent/structs"
+	"github.com/hashicorp/consul/api"
 )
 
 const (
@@ -448,5 +449,27 @@ func (s *Store) deleteSessionTxn(tx WriteTxn, idx uint64, sessionID string, entM
 		}
 	}
 
+	return s.markSessionCheckCritical(tx, idx, session)
+}
+
+func (s *Store) markSessionCheckCritical(tx WriteTxn, idx uint64, session *structs.Session) error {
+	// Find all checks for the given Node
+	iter, err := tx.Get(tableChecks, indexNode, Query{Value: session.Node, EnterpriseMeta: session.EnterpriseMeta})
+	if err != nil {
+		return fmt.Errorf("failed check lookup: %s", err)
+	}
+
+	for check := iter.Next(); check != nil; check = iter.Next() {
+		hc := check.(*structs.HealthCheck)
+		if hc.Type == "session" && hc.Definition.SessionID == session.ID {
+			updatedCheck := hc.Clone()
+			updatedCheck.Status = api.HealthCritical
+
+			err := s.ensureCheckTxn(tx, idx, true, updatedCheck)
+			if err != nil {
+				return err
+			}
+		}
+	}
 	return nil
 }
