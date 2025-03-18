@@ -89,6 +89,7 @@ message HealthCheckDefinition {
   string AliasService = 16;
   // mog: func-to=structs.DurationFromProto func-from=structs.DurationToProto
   google.protobuf.Duration TTL = 17;
+  string SessionName = 26;
 }
 
 // CheckType is used to create either the CheckMonitor or the CheckTTL.
@@ -159,4 +160,6 @@ message CheckType {
 
   // mog: func-to=int func-from=int32
   int32 OutputMaxSize = 25;
+
+  string SessionName = 35;
 }
